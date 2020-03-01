@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 from api.api import api
 from api.models import db
-from api.config import Config
+from api.config import DevConfig
 
 def create_app(config):
     app = Flask(__name__)
@@ -17,10 +17,9 @@ def register_extensions(app):
     api.init_app(app)
     db.init_app(app)
 
-app = create_app(Config)
-
+app = create_app(DevConfig)
+app.logger.info('Starting server...')
 
 # Run the application
-# if __name__ == '__main__':
-#     app = create_app(Config)
-#     app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80, debug=True)

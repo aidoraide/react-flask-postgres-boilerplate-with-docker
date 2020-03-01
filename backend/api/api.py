@@ -7,6 +7,7 @@ api = Api()
 
 class Player(Resource):
     def get(self):
-        return jsonify([to_dict(player) for player in PlayerModel.query.all()])
+        all_players = [to_dict(player) for player in PlayerModel.query.all()]
+        return jsonify(all_players)
 
 api.add_resource(Player, '/')

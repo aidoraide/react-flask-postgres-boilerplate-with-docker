@@ -1,4 +1,5 @@
 client/node_modules
 .idea
+.vscode
 backend/venv
-backend/api/__pycache__
+**/__pycache__

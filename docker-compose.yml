@@ -15,7 +15,7 @@ services:
       - './db/init:/docker-entrypoint-initdb.d/'
 
   flask-api:
-    container_name: app-app
+    container_name: flask-app
     restart: always
     build:
       context: ./backend/
@@ -26,6 +26,8 @@ services:
       - ./backend:/usr/src/app
     depends_on:
       - "db"
+    environment:
+      - FLASK_ENV=development
 
   client:
     container_name: react-app
@@ -42,4 +44,4 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
-      - HOST_URL=http://192.168.99.100:5000
+      - HOST_URL=http://flask-app:5000
