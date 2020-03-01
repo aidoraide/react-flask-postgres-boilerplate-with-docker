@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { CONFIG } from './config.js';
 
@@ -14,11 +13,12 @@ class App extends Component {
   async componentDidMount() {
     const res = await fetch(CONFIG.API_BASE_URL);
     const players = await res.json();
+    console.log({players});
     this.setState({players: players});
   }
 
   render() {
-    const players = this.state.players.map((player, index) => <li key={index}>{player.lastname} {player.firstname}</li>);
+    const players = this.state.players.map((player, index) => <li key={index}>{player.id} {player.email}</li>);
 
     return (
       <div>

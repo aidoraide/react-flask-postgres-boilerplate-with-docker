@@ -8,11 +8,11 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_DB=sport_stats
-      - POSTGRES_USER=myuser
+      - POSTGRES_DB=application
+      - POSTGRES_USER=dev
       - POSTGRES_PASSWORD=mypassword
-    volumes:
-      - './db/init:/docker-entrypoint-initdb.d/'
+    # volumes:
+    #   - './db/init:/docker-entrypoint-initdb.d/'
 
   flask-api:
     container_name: flask-app

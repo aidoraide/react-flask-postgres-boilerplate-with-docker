@@ -4,7 +4,7 @@ This project allows to run a quick application with ReactJS (Javascript front-en
 
 ### Features
 
-A database named `sport_stats` (user: myuser / password: mypassword) is initialized when the database container start. These default values can be changed in the `docker-compose.yml` file.
+A database named `sport_stats` (user: dev / password: mypassword) is initialized when the database container start. These default values can be changed in the `docker-compose.yml` file.
 A table `players` with one record is created by copying the file `db/init/init.sql` into the `/docker-entrypoint-initdb.d/` container directory ([see documentation of postgres official image](https://hub.docker.com/_/postgres/)).
 
 The Flask application uses SQLAlchemy to retrieve the content of the `players`, ReactJS call the REST API and display it !

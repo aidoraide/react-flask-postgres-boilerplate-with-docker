@@ -1,9 +1,13 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_sqlalchemy_session import flask_scoped_session
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from api.api import api
-from api.models import db
-from api.config import DevConfig
+from api.models.db import db
+from api.config import Config
 
 def create_app(config):
     app = Flask(__name__)
@@ -17,7 +21,12 @@ def register_extensions(app):
     api.init_app(app)
     db.init_app(app)
 
-app = create_app(DevConfig)
+
+engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+session_factory = sessionmaker(bind=engine)
+
+app = create_app(Config)
+session = flask_scoped_session(session_factory, app)
 app.logger.info('Starting server...')
 
 # Run the application

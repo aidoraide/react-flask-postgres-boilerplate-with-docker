@@ -1,13 +1,14 @@
 from flask import jsonify
 from flask_restful import Resource, Api
+from flask_sqlalchemy_session import current_session
 
-from .models import Player as PlayerModel, to_dict
+from .models.User import User as UserModel
 
 api = Api()
 
-class Player(Resource):
+class User(Resource):
     def get(self):
-        all_players = [to_dict(player) for player in PlayerModel.query.all()]
-        return jsonify(all_players)
+        users = [user.to_dict() for user in current_session.query(UserModel).all()]
+        return jsonify(users)
 
-api.add_resource(Player, '/')
+api.add_resource(User, '/')
