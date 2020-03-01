@@ -8,6 +8,6 @@ class DevConfig(object):
 
 if os.environ.get('FLASK_ENV') == 'production':
     # TODO make a prod config
-    Config = DevConfig
+    raise Exception('No config for production yet')
 else:
     Config = DevConfig

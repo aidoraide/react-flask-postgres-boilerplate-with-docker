@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+
 def to_dict(obj):
     if isinstance(obj, Base):
         # an SQLAlchemy class
@@ -26,5 +27,6 @@ def to_dict(obj):
 class Convert2Dict:
     def to_dict(self):
         return to_dict(self)
+
 
 db = SQLAlchemy()

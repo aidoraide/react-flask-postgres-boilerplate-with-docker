@@ -5,9 +5,9 @@ from flask_sqlalchemy_session import flask_scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from api.api import api
-from api.models.db import db
-from api.config import Config
+from app.api import api
+from app.models.db import db
+from app.config import Config
 
 def create_app(config):
     app = Flask(__name__)
@@ -27,7 +27,6 @@ session_factory = sessionmaker(bind=engine)
 
 app = create_app(Config)
 session = flask_scoped_session(session_factory, app)
-app.logger.info('Starting server...')
 
 # Run the application
 if __name__ == '__main__':
