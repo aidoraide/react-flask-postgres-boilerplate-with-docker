@@ -1,3 +1,5 @@
-export const CONFIG = {
-    API_BASE_URL: 'http://flask-app:5000'
+const DEV_CONFIG = {
+    API_BASE_URL: 'http://localhost:5000',
 };
+
+export const CONFIG = DEV_CONFIG;
