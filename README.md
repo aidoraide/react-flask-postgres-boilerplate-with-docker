@@ -23,6 +23,15 @@ And your app will be up on the *port 3000* !
 
 ### Special notes
 
-##### Reloading Database configuration
+##### Fully Resetting Database
+```
+docker rm -f -v postgres
+docker-compose up --build
+alembic upgrade head
+```
 
-If you change user, password, database name or any other kind of database configuration, you may need to run `docker-compose -up --build` from a fresh start. Make sure to run `docker-compose down` before or even `docker-compose rm` if some containers are stopped but not destroyed.
+
+##### Connecting to development DB
+```
+psql postgresql://dev:mypassword@localhost:5432/application
+```

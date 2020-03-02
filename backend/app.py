@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy_session import flask_scoped_session
@@ -14,9 +15,12 @@ from app.utils.config import Config
 
 def create_app(config):
     app = Flask(__name__, template_folder='app/templates')
-    CORS(app)
     app.config.from_object(config)
+    engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+    session_factory = sessionmaker(bind=engine)
+    session = flask_scoped_session(session_factory, app)
     register_extensions(app)
+    CORS(app)
     return app
 
 
@@ -26,11 +30,8 @@ def register_extensions(app):
     mail.init_app(app)
 
 
-engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
-session_factory = sessionmaker(bind=engine)
-
 app = create_app(Config)
-session = flask_scoped_session(session_factory, app)
+
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
