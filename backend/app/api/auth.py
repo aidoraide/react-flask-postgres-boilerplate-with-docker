@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
 from functools import wraps
-
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization, hashes, hmac
+from cryptography.hazmat.primitives.asymmetric import padding
 import bcrypt
 import jwt
+import base64
 
 from flask import jsonify, request, current_app, render_template
 from flask_restful import reqparse, Resource
@@ -33,6 +36,21 @@ def generate_jwt(user):
 
 def parse_jwt(encoded_jwt):
     return jwt.decode(encoded_jwt, current_app.config['JWT_PUBLIC_KEY'])
+
+
+def get_hmac_secret(s: str):
+    h = hmac.HMAC(current_app.config['JWT_PRIVATE_KEY'].encode(), hashes.SHA512(), backend=default_backend())
+    h.update(s.encode())
+    return base64.b64encode(h.finalize()).decode()
+
+
+def get_confirmation_secret(user: UserModel) -> str:
+    data = f"{user.id}:{user.email}"
+    return get_hmac_secret(data)
+
+
+def verify_confirmation_secret(user: UserModel, confirmation_secret: str) -> UserModel:
+    return get_confirmation_secret(user) == confirmation_secret
 
 
 def auth_required(original_func=None, *, refresh=True):
@@ -90,6 +108,14 @@ class SignUp(TransactionalJSONResource):
         new_user = UserModel(email=email, password_hash=hashed)
         current_session.add(new_user)
         fetched_user = current_session.query(UserModel).filter(UserModel.email == email).first()
+        
+        confirmation_secret = get_confirmation_secret(fetched_user)
+        msg = Message("Confirm Your Account",
+            sender="from@example.com",
+            recipients=[fetched_user.email],
+            html=render_template('confirm_account.html', user=fetched_user, confirmation_secret=confirmation_secret, REACT_URL='http://localhost:3000')
+        )
+        mail.send(msg)
         return {'token': generate_jwt(fetched_user)}
 
 
@@ -163,10 +189,28 @@ class ResetPassword(TransactionalJSONResource):
         return {'status': 'success'}
 
 
+confirmEmailArgs = reqparse.RequestParser()
+confirmEmailArgs.add_argument('confirmation_secret', help='This field cannot be blank', required=True)
+confirmEmailArgs.add_argument('user_id', type=int, help='This field cannot be blank', required=True)
+confirmEmailArgs.add_argument('email', help='This field cannot be blank', required=True)
+class ConfirmEmail(TransactionalJSONResource):
+    def post(self):
+        data = confirmEmailArgs.parse_args()
+        confirmation_secret, user_id, email = data['confirmation_secret'], data['user_id'], data['email']
+        user = current_session.query(UserModel).filter(UserModel.id == user_id, UserModel.email == email).first()
+        if not user:
+            raise ClientError('Invalid request data NO USER')
+        if not verify_confirmation_secret(user, confirmation_secret):
+            raise ClientError('Invalid request data BAD SECRET')
+        user.confirmed_email = True
+        return {'status': 'success'}
+
+
 endpoints = {
     '/signup': SignUp,
     '/login': Login,
     '/logout_everywhere': LogoutEverywhere,
+    '/confirm_email': ConfirmEmail,
     '/initiate_password_reset': InitiatePasswordReset,
     '/reset_password': ResetPassword,
 }

@@ -17,17 +17,17 @@
 {% endblock %}
 
 {% block title %}
-Reset your password
+Confirm your account
 {% endblock %}
 
 {% block content %}
 <p>
-    Someone requested to reset your password for THIS SITE. Click the link below to change your password.
+    Someone signed up for SITE NAME using this email, click the button below to confirm your email.
 </p>
 <div>
-    <a class="button" href="{{ REACT_URL }}/reset_password?secret_code={{ reset_request.secret_code }}&id={{ reset_request.id }}&email={{ user.email | urlencode }}">Reset password</a>
+    <a class="button" href="{{ REACT_URL }}/confirm_account?confirmation={{ confirmation_secret | urlencode }}&id={{ user.id }}&email={{ user.email | urlencode }}">Confirm Account</a>
 </div>
 <p>
-If this wasn't you you can safely ignore this email
+If this wasn't you you can just ignore this email.
 </p>
 {% endblock %}
