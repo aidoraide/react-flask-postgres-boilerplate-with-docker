@@ -2,12 +2,14 @@
 
 This project allows to run a quick application with ReactJS (Javascript front-end), Flask (Python backend) and PostgreSQL (relational database) by running it on Docker containers.
 
+This is intended as a quick project starter to avoid the overhead of writing a bunch of simple code to stick together backend + frontend with an authentication system.
+
 ### Features
 
-A database named `sport_stats` (user: dev / password: mypassword) is initialized when the database container start. These default values can be changed in the `docker-compose.yml` file.
-A table `players` with one record is created by copying the file `db/init/init.sql` into the `/docker-entrypoint-initdb.d/` container directory ([see documentation of postgres official image](https://hub.docker.com/_/postgres/)).
+A database named `application` (user: dev / password: mypassword) is initialized when the database container start. These default values can be changed in the `docker-compose.yml` file.
+Running `alembic upgrade head` will create the tables for a working authentication system.
 
-The Flask application uses SQLAlchemy to retrieve the content of the `players`, ReactJS call the REST API and display it !
+The React App has an API library and has some buttons and inputs to call the endpoints needed.
 
 **Hot reloading** is enabled for the React and Flask code, after every code change the container is up-to-date automatically !
 
