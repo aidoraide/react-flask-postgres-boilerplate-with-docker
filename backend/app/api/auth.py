@@ -161,3 +161,12 @@ class ResetPassword(TransactionalJSONResource):
         user.password_hash = hashed
 
         return {'status': 'success'}
+
+
+endpoints = {
+    '/signup': SignUp,
+    '/login': Login,
+    '/logout_everywhere': LogoutEverywhere,
+    '/initiate_password_reset': InitiatePasswordReset,
+    '/reset_password': ResetPassword,
+}

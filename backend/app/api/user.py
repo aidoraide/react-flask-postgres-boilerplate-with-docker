@@ -15,3 +15,9 @@ class Me(JSONResource):
     @auth_required
     def get(self, user):
         return user.to_dict()
+
+
+endpoints = {
+    '/me': Me,
+    '/': User
+}
