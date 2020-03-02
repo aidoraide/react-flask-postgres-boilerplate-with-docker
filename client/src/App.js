@@ -14,7 +14,7 @@ class App extends Component {
     const res = await fetch(CONFIG.API_BASE_URL);
     const players = await res.json();
     console.log({players});
-    this.setState({players: players});
+    this.setState({players: players.response});
   }
 
   render() {

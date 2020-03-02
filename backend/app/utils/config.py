@@ -75,6 +75,19 @@ J6Rh1yVHtKocQBpQxS9HVGMCAwEAAQ==
 -----END PUBLIC KEY-----
 """.lstrip()
 
+    # Flask mail setup
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_DEBUG = True
+    MAIL_USERNAME = 'testflaskmail12345@gmail.com'
+    MAIL_PASSWORD = 'TestFlaskMail12345!'
+    MAIL_DEFAULT_SENDER = None
+    MAIL_MAX_EMAILS = None
+    MAIL_SUPPRESS_SEND = False
+    MAIL_ASCII_ATTACHMENTS = False
+
 if os.environ.get('FLASK_ENV') == 'production':
     # TODO make a prod config
     raise Exception('No config for production yet')

@@ -8,10 +8,12 @@ from sqlalchemy.orm import sessionmaker
 from app.api.api import api
 from app.api.error import APIException
 from app.models.db import db
-from app.config import Config
+from app.utils.mail import mail
+from app.utils.config import Config
+
 
 def create_app(config):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='app/templates')
     CORS(app)
     app.config.from_object(config)
     register_extensions(app)
@@ -21,6 +23,7 @@ def create_app(config):
 def register_extensions(app):
     api.init_app(app)
     db.init_app(app)
+    mail.init_app(app)
 
 
 engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)

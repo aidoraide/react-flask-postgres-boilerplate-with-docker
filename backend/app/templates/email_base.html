@@ -1,0 +1,16 @@
+<style>
+    .container {
+        background-color: #e2e2e2;
+        padding: 40px 20px;
+    }
+    .title {
+        color: #444444;
+    }
+</style>
+{% block styles %}{% endblock %}
+<div class="container">
+    <h1 class="title">{% block title %}{% endblock %}</h1>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
